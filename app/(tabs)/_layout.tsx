@@ -1,11 +1,15 @@
+
 import React from 'react';
 import { Platform } from 'react-native';
 import { NativeTabs, Icon, Label } from 'expo-router/unstable-native-tabs';
 import { Stack } from 'expo-router';
 import FloatingTabBar, { TabBarItem } from '@/components/FloatingTabBar';
+import { colors } from '@/styles/commonStyles';
 
 export default function TabLayout() {
-  // Define the tabs configuration
+  console.log('TabLayout rendered');
+  
+  // Define the tabs configuration for the temple app
   const tabs: TabBarItem[] = [
     {
       name: '(home)',
@@ -14,10 +18,22 @@ export default function TabLayout() {
       label: 'Home',
     },
     {
-      name: 'profile',
-      route: '/(tabs)/profile',
-      icon: 'person.fill',
-      label: 'Profile',
+      name: 'deities',
+      route: '/(tabs)/deities',
+      icon: 'star.fill',
+      label: 'Deities',
+    },
+    {
+      name: 'events',
+      route: '/(tabs)/events',
+      icon: 'calendar',
+      label: 'Events',
+    },
+    {
+      name: 'donations',
+      route: '/(tabs)/donations',
+      icon: 'heart.fill',
+      label: 'Donate',
     },
   ];
 
@@ -29,9 +45,17 @@ export default function TabLayout() {
           <Icon sf="house.fill" drawable="ic_home" />
           <Label>Home</Label>
         </NativeTabs.Trigger>
-        <NativeTabs.Trigger name="profile">
-          <Icon sf="person.fill" drawable="ic_profile" />
-          <Label>Profile</Label>
+        <NativeTabs.Trigger name="deities">
+          <Icon sf="star.fill" drawable="ic_star" />
+          <Label>Deities</Label>
+        </NativeTabs.Trigger>
+        <NativeTabs.Trigger name="events">
+          <Icon sf="calendar" drawable="ic_calendar" />
+          <Label>Events</Label>
+        </NativeTabs.Trigger>
+        <NativeTabs.Trigger name="donations">
+          <Icon sf="heart.fill" drawable="ic_heart" />
+          <Label>Donate</Label>
         </NativeTabs.Trigger>
       </NativeTabs>
     );
@@ -47,7 +71,9 @@ export default function TabLayout() {
         }}
       >
         <Stack.Screen name="(home)" />
-        <Stack.Screen name="profile" />
+        <Stack.Screen name="deities" />
+        <Stack.Screen name="events" />
+        <Stack.Screen name="donations" />
       </Stack>
       <FloatingTabBar tabs={tabs} />
     </>

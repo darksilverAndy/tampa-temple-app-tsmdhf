@@ -1,161 +1,237 @@
-import React from "react";
-import { Stack, Link } from "expo-router";
-import { FlatList, Pressable, StyleSheet, View, Text, Alert, Platform } from "react-native";
-import { IconSymbol } from "@/components/IconSymbol";
-import { GlassView } from "expo-glass-effect";
-import { useTheme } from "@react-navigation/native";
 
-const ICON_COLOR = "#007AFF";
+import React from "react";
+import { Stack } from "expo-router";
+import { ScrollView, StyleSheet, View, Text, Image, Pressable } from "react-native";
+import { IconSymbol } from "@/components/IconSymbol";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { colors, commonStyles } from "@/styles/commonStyles";
 
 export default function HomeScreen() {
-  const theme = useTheme();
-  const modalDemos = [
+  console.log('HomeScreen rendered');
+
+  const upcomingEvents = [
     {
-      title: "Standard Modal",
-      description: "Full screen modal presentation",
-      route: "/modal",
-      color: "#007AFF",
+      title: "Mandala Pooja",
+      date: "December 17, 2024",
+      time: "6:00 AM - 8:00 PM",
+      description: "Special prayers and offerings during the sacred Mandala period"
     },
     {
-      title: "Form Sheet",
-      description: "Bottom sheet with detents and grabber",
-      route: "/formsheet",
-      color: "#34C759",
+      title: "Makaravilakku",
+      date: "January 14, 2025",
+      time: "5:30 AM - 9:00 PM",
+      description: "Celebration of the divine light at Sabarimala"
     },
     {
-      title: "Transparent Modal",
-      description: "Overlay without obscuring background",
-      route: "/transparent-modal",
-      color: "#FF9500",
+      title: "Monthly Abhishekam",
+      date: "Every First Saturday",
+      time: "7:00 AM - 12:00 PM",
+      description: "Special abhishekam for Lord Ayyappa"
     }
   ];
 
-  const renderModalDemo = ({ item }: { item: (typeof modalDemos)[0] }) => (
-    <GlassView style={[
-      styles.demoCard,
-      Platform.OS !== 'ios' && { backgroundColor: theme.dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' }
-    ]} glassEffectStyle="regular">
-      <View style={[styles.demoIcon, { backgroundColor: item.color }]}>
-        <IconSymbol name="square.grid.3x3" color="white" size={24} />
-      </View>
-      <View style={styles.demoContent}>
-        <Text style={[styles.demoTitle, { color: theme.colors.text }]}>{item.title}</Text>
-        <Text style={[styles.demoDescription, { color: theme.dark ? '#98989D' : '#666' }]}>{item.description}</Text>
-      </View>
-      <Link href={item.route as any} asChild>
-        <Pressable>
-          <GlassView style={[
-            styles.tryButton,
-            Platform.OS !== 'ios' && { backgroundColor: theme.dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)' }
-          ]} glassEffectStyle="clear">
-            <Text style={[styles.tryButtonText, { color: theme.colors.primary }]}>Try It</Text>
-          </GlassView>
-        </Pressable>
-      </Link>
-    </GlassView>
-  );
+  const prayerTimings = [
+    { time: "6:00 AM", prayer: "Morning Prayers" },
+    { time: "12:00 PM", prayer: "Noon Prayers" },
+    { time: "7:00 PM", prayer: "Evening Prayers" }
+  ];
 
   const renderHeaderRight = () => (
     <Pressable
-      onPress={() => Alert.alert("Not Implemented", "This feature is not implemented yet")}
+      onPress={() => console.log('Notifications pressed')}
       style={styles.headerButtonContainer}
     >
-      <IconSymbol name="plus" color={theme.colors.primary} />
+      <IconSymbol name="bell" color={colors.primary} size={24} />
     </Pressable>
   );
 
   const renderHeaderLeft = () => (
     <Pressable
-      onPress={() => Alert.alert("Not Implemented", "This feature is not implemented yet")}
+      onPress={() => console.log('Menu pressed')}
       style={styles.headerButtonContainer}
     >
-      <IconSymbol
-        name="gear"
-        color={theme.colors.primary}
-      />
+      <IconSymbol name="line.horizontal.3" color={colors.primary} size={24} />
     </Pressable>
   );
 
   return (
-    <>
-      {Platform.OS === 'ios' && (
-        <Stack.Screen
-          options={{
-            title: "Building the app...",
-            headerRight: renderHeaderRight,
-            headerLeft: renderHeaderLeft,
-          }}
-        />
-      )}
-      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-        <FlatList
-          data={modalDemos}
-          renderItem={renderModalDemo}
-          keyExtractor={(item) => item.route}
-          contentContainerStyle={[
-            styles.listContainer,
-            Platform.OS !== 'ios' && styles.listContainerWithTabBar
-          ]}
-          contentInsetAdjustmentBehavior="automatic"
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
-    </>
+    <SafeAreaView style={[commonStyles.container, { backgroundColor: colors.background }]}>
+      <Stack.Screen
+        options={{
+          title: "Tampa Ayyappa Temple",
+          headerStyle: { backgroundColor: colors.background },
+          headerTintColor: colors.primary,
+          headerTitleStyle: { fontWeight: '600' },
+          headerRight: renderHeaderRight,
+          headerLeft: renderHeaderLeft,
+        }}
+      />
+      
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Welcome Section */}
+        <View style={commonStyles.highlightCard}>
+          <Text style={commonStyles.title}>🕉️ Welcome Devotees</Text>
+          <Text style={commonStyles.text}>
+            Tampa Ayyappa Temple - A sacred place of worship dedicated to Lord Ayyappa. 
+            Join us in our spiritual journey and community celebrations.
+          </Text>
+        </View>
+
+        {/* Daily Prayer Timings */}
+        <View style={commonStyles.card}>
+          <Text style={[commonStyles.subtitle, { marginBottom: 16 }]}>🙏 Daily Prayer Timings</Text>
+          {prayerTimings.map((timing, index) => (
+            <View key={index} style={styles.timingRow}>
+              <Text style={[commonStyles.text, { fontWeight: '600', color: colors.primary }]}>
+                {timing.time}
+              </Text>
+              <Text style={commonStyles.text}>{timing.prayer}</Text>
+            </View>
+          ))}
+        </View>
+
+        {/* Upcoming Events */}
+        <View style={commonStyles.card}>
+          <Text style={[commonStyles.subtitle, { marginBottom: 16 }]}>📅 Upcoming Events</Text>
+          {upcomingEvents.map((event, index) => (
+            <View key={index} style={styles.eventCard}>
+              <Text style={[commonStyles.text, { fontWeight: '600', color: colors.primary, marginBottom: 4 }]}>
+                {event.title}
+              </Text>
+              <Text style={[commonStyles.textSecondary, { marginBottom: 2 }]}>
+                📅 {event.date} • ⏰ {event.time}
+              </Text>
+              <Text style={commonStyles.textSecondary}>
+                {event.description}
+              </Text>
+              {index < upcomingEvents.length - 1 && <View style={commonStyles.divider} />}
+            </View>
+          ))}
+        </View>
+
+        {/* Temple Information */}
+        <View style={commonStyles.card}>
+          <Text style={[commonStyles.subtitle, { marginBottom: 16 }]}>🏛️ Temple Information</Text>
+          <View style={styles.infoRow}>
+            <IconSymbol name="location" color={colors.accent} size={20} />
+            <Text style={[commonStyles.textSecondary, { marginLeft: 8, flex: 1 }]}>
+              Tampa, Florida
+            </Text>
+          </View>
+          <View style={styles.infoRow}>
+            <IconSymbol name="phone" color={colors.accent} size={20} />
+            <Text style={[commonStyles.textSecondary, { marginLeft: 8, flex: 1 }]}>
+              Contact for more information
+            </Text>
+          </View>
+          <View style={styles.infoRow}>
+            <IconSymbol name="globe" color={colors.accent} size={20} />
+            <Text style={[commonStyles.textSecondary, { marginLeft: 8, flex: 1 }]}>
+              www.tampaayyappatemple.org
+            </Text>
+          </View>
+        </View>
+
+        {/* Quick Actions */}
+        <View style={commonStyles.card}>
+          <Text style={[commonStyles.subtitle, { marginBottom: 16 }]}>⚡ Quick Actions</Text>
+          <View style={styles.quickActionsGrid}>
+            <Pressable 
+              style={styles.quickActionButton}
+              onPress={() => console.log('Deities pressed')}
+            >
+              <IconSymbol name="star" color={colors.card} size={24} />
+              <Text style={styles.quickActionText}>Deities</Text>
+            </Pressable>
+            <Pressable 
+              style={styles.quickActionButton}
+              onPress={() => console.log('Events pressed')}
+            >
+              <IconSymbol name="calendar" color={colors.card} size={24} />
+              <Text style={styles.quickActionText}>Events</Text>
+            </Pressable>
+            <Pressable 
+              style={styles.quickActionButton}
+              onPress={() => console.log('Donations pressed')}
+            >
+              <IconSymbol name="heart" color={colors.card} size={24} />
+              <Text style={styles.quickActionText}>Donate</Text>
+            </Pressable>
+            <Pressable 
+              style={styles.quickActionButton}
+              onPress={() => console.log('Contact pressed')}
+            >
+              <IconSymbol name="phone" color={colors.card} size={24} />
+              <Text style={styles.quickActionText}>Contact</Text>
+            </Pressable>
+          </View>
+        </View>
+
+        {/* Announcements */}
+        <View style={commonStyles.highlightCard}>
+          <Text style={[commonStyles.subtitle, { marginBottom: 16 }]}>📢 Announcements</Text>
+          <Text style={commonStyles.textSecondary}>
+            • Temple will remain open during all festival days
+          </Text>
+          <Text style={commonStyles.textSecondary}>
+            • Special parking arrangements during major events
+          </Text>
+          <Text style={commonStyles.textSecondary}>
+            • Prasadam distribution after evening prayers
+          </Text>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  scrollView: {
     flex: 1,
-    // backgroundColor handled dynamically
   },
-  listContainer: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-  },
-  listContainerWithTabBar: {
+  scrollContent: {
+    padding: 16,
     paddingBottom: 100, // Extra padding for floating tab bar
   },
-  demoCard: {
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+  headerButtonContainer: {
+    padding: 8,
+  },
+  timingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  eventCard: {
+    marginBottom: 16,
+  },
+  infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 12,
   },
-  demoIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
+  quickActionsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  quickActionButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    padding: 16,
     alignItems: 'center',
-    marginRight: 16,
+    justifyContent: 'center',
+    width: '48%',
+    marginBottom: 12,
   },
-  demoContent: {
-    flex: 1,
-  },
-  demoTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 4,
-    // color handled dynamically
-  },
-  demoDescription: {
-    fontSize: 14,
-    lineHeight: 18,
-    // color handled dynamically
-  },
-  headerButtonContainer: {
-    padding: 6,
-  },
-  tryButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 6,
-  },
-  tryButtonText: {
+  quickActionText: {
+    color: colors.card,
     fontSize: 14,
     fontWeight: '600',
-    // color handled dynamically
+    marginTop: 8,
   },
 });
